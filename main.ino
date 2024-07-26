@@ -1,49 +1,54 @@
-#define LS 10  // left sensor
-#define RS 9   // right sensor
-#define LM1 7  //motor Driver in1
-#define LM2 6  //motor Driver in2
-#define RM1 5  //motor Driver in3
-#define RM2 4  //motor Driver in4
-
+#define leftSensor 3
+#define rightSensor 2
+#define leftMotorForward 4
+#define leftMotorBackward 5
+#define rightMotorForward 6
+#define rightMotorBackward 7
 void setup() {
-  pinMode(LS, INPUT);
-  pinMode(RS, INPUT);
-  pinMode(LM1, OUTPUT);
-  pinMode(LM2, OUTPUT);
-  pinMode(RM1, OUTPUT);
-  pinMode(RM2, OUTPUT);
+  Serial.begin(9600);
+  pinMode(leftSensor, INPUT);
+  pinMode(rightSensor, INPUT);
+  pinMode(leftMotorForward, OUTPUT);
+  pinMode(leftMotorBackward, OUTPUT);
+  pinMode(rightMotorForward, OUTPUT);
+  pinMode(rightMotorBackward, OUTPUT);
+  digitalWrite(leftMotorForward, LOW);
+  digitalWrite(leftMotorBackward, LOW);
+  digitalWrite(rightMotorForward, LOW);
+  digitalWrite(rightMotorBackward, LOW);
 }
+// 1  walk
+// 0 do not walk
+
 void loop() {
-
-
-  if (!digitalRead(LS) && !digitalRead(RS)) {
-    // FORWARD
-    digitalWrite(LM1, HIGH);
-    digitalWrite(LM2, LOW);
-    digitalWrite(RM1, HIGH);
-    digitalWrite(RM2, LOW);
+  int leftSensorValue = digitalRead(leftSensor); 
+  int rightSensorValue = digitalRead(rightSensor);
+  // forward
+  if(leftSensorValue==0&&rightSensorValue==0){
+    digitalWrite(leftMotorForward, HIGH);
+    digitalWrite(rightMotorForward, HIGH);
+    digitalWrite(rightMotorBackward, LOW);
+    digitalWrite(leftMotorBackward, LOW);
   }
-
-  if ((digitalRead(LS)) && !digitalRead(RS)) {
-    // Left turn
-    digitalWrite(LM1, LOW);
-    digitalWrite(LM2, LOW);
-    digitalWrite(RM1, HIGH);
-    digitalWrite(RM2, LOW);
+  // left
+  else if(leftSensorValue==1&&rightSensorValue==0){
+    digitalWrite(leftMotorForward, LOW);
+    digitalWrite(rightMotorForward, HIGH);
+    digitalWrite(rightMotorBackward, LOW);
+    digitalWrite(leftMotorBackward, HIGH);
   }
-
-  if (!digitalRead(LS) && (digitalRead(RS))) {
-    // turn right
-    digitalWrite(LM1, HIGH);
-    digitalWrite(LM2, LOW);
-    digitalWrite(RM1, LOW);
-    digitalWrite(RM2, LOW);
+  //right
+  else if(leftSensorValue==0&&rightSensorValue==1){
+    digitalWrite(leftMotorForward, HIGH);
+    digitalWrite(rightMotorForward, LOW);
+    digitalWrite(rightMotorBackward, HIGH);
+    digitalWrite(leftMotorBackward, LOW);
   }
-
-  if ((digitalRead(LS)) && (digitalRead(RS))) {  //Stop
-    digitalWrite(LM1, LOW);
-    digitalWrite(LM2, LOW);
-    digitalWrite(RM1, LOW);
-    digitalWrite(RM2, LOW);
+  //stop
+  else if(leftSensorValue==1&&rightSensorValue==1){
+    digitalWrite(leftMotorForward, LOW);
+    digitalWrite(rightMotorForward, LOW);
+    digitalWrite(rightMotorBackward, LOW);
+    digitalWrite(leftMotorBackward, LOW);
   }
 }
